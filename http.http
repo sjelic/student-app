@@ -1,0 +1,19 @@
+
+
+POST http://localhost:5000/student HTTP/1.1
+Content-Type: application/json
+
+{
+    "ime": "Marko",
+    "prezime": "Marković",
+    "email": "marko,markovic@grf.bg.ac.rs"
+}
+
+POST http://localhost:5000/student HTTP/1.1
+Content-Type: application/json
+
+{
+    "ime": "Pero",
+    "prezime": "Perić",
+    "email": "pero.peric@grf.bg.ac.rs"
+}
