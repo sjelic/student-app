@@ -1,18 +1,22 @@
-import logo from './logo.svg';
+import React from "react";
+import Header from "./Header";
 import axios from "axios";
-import {useEffect, useState} from "react";
-import './App.css';
+import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit, faTrashAlt, faSearch } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from "react-router-dom";
 
 const baseUrl = "http://localhost:5000";
 
-function App() {
+const Studenti = () => {
   const [studenti, postaviStudente] = useState([]);
   const [student, postaviStudenta] = useState({});
   const [studentId, postaviStudentId] = useState(null);
   const [mode, postaviMode] = useState("unos");
+  const navigate = useNavigate();
 
   const dohvatiStudente = async () => {
-    const podaci = await axios.get('http://localhost:5000/student');
+    const podaci = await axios.get('http://localhost:5000/api/v1/studenti');
     const studenti = podaci.data.studenti;
     postaviStudente(studenti);
   }
@@ -23,10 +27,14 @@ function App() {
     postaviMode('promena');
   }
 
+  const detaljiStudenta = (s) => {
+    navigate("/studenti/"+s.id)
+  }
+
   const promeniStudenta = async (e) => {
     e.preventDefault();
     try {
-      const data = await axios.put(`${baseUrl}/student/${studentId}`, student);
+      const data = await axios.put(`${baseUrl}/api/v1/studenti/${studentId}`, student);
   
       const ss = studenti.map(s => 
         {
@@ -54,7 +62,7 @@ function App() {
     try {
       
       const data = await axios.post(
-        'http://localhost:5000/student', student
+        'http://localhost:5000/api/v1/studenti', student
       );
       postaviStudente([...studenti, data.data]);
       //console.log(studenti);
@@ -72,8 +80,11 @@ function App() {
   useEffect( () => {dohvatiStudente(); }, []);
   //console.log(studenti);
   return (
+    
     <div className="container mt-3">
+    <Header/>
       <h2>Upis studenta</h2>
+      
       <form>
         <div className="mb-3 mt-3">
           <label htmlFor="ime">
@@ -100,7 +111,7 @@ function App() {
           (e) => { mode === 'unos' ? unesiStudenta(e) : promeniStudenta(e)} 
         }>Sačuvaj</button>
       </form>
-      
+      <br/>
       <table className="table">
         <thead className="table-dark">
           <tr>
@@ -117,9 +128,11 @@ function App() {
               student => {
                 return(
                   <tr>
-                    <td className='col-1'>
-                      <button type='submit' className='btn btn-secondary btn-sm' onClick={() => pokreniPromenu(student)}>Promeni</button>
-                      <button type='submit' className='btn btn-danger btn-sm'>Obriši
+                    <td className='col-2'>
+                      <button type='submit' className='btn btn-secondary btn-sm' onClick={() => pokreniPromenu(student)}><FontAwesomeIcon icon={faEdit} /></button> &nbsp;
+                      <button type='submit' className='btn btn-danger btn-sm'><FontAwesomeIcon icon={faTrashAlt} />
+                      </button> &nbsp;
+                      <button type='submit' className='btn btn-primary btn-sm'><FontAwesomeIcon icon={faSearch}  onClick={() => detaljiStudenta(student)}/>
                       </button>
                     </td>
                     <td>{student.ime}</td>
@@ -139,4 +152,4 @@ function App() {
   );
 }
 
-export default App;
+export default Studenti;
