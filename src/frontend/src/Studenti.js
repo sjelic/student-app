@@ -59,16 +59,19 @@ const Studenti = () => {
 
   const unesiStudenta = async (e) => {
     e.preventDefault();
-    try {
-      
-      const data = await axios.post(
-        'http://localhost:5000/api/v1/studenti', student
-      );
-      postaviStudente([...studenti, data.data]);
-      //console.log(studenti);
-    } catch (err) {
-      console.log(err.message);
-    }
+    await axios.post(
+      'http://localhost:5000/api/v1/studenti',
+      student,
+      {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+        }
+      }
+    ).then(
+      (data) => {
+        postaviStudente([...studenti, data.data]);
+      }
+    );
   }
   const promeni = (event) => {
     const name = event.target.name;

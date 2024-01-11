@@ -17,6 +17,7 @@ import Predmet from './Predmet';
 import Login from './Login';
 import Registracija from './Registracija';
 import Student from './Student';
+import Upis from './Upis';
 
 const router= createBrowserRouter(
 [
@@ -66,6 +67,10 @@ const router= createBrowserRouter(
         element: <Registracija />
       }
     ]
+  },
+  {
+    path: "/upis",
+    element: <Upis/>
   }
 ]
 )
